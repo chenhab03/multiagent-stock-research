@@ -1634,14 +1634,19 @@ Skill("equity-research:thesis", "[TICKER]")
 
 > 🚨 **绝对禁止**：不得用 `Write` / `Edit` 工具直接生成 HTML 文件。必须且只能通过以下方式调用 `report` skill。绕过此步骤会导致深色主题/样式错误。
 
-执行 `--html` 时，**必须用 `Skill` 工具显式调用 `report` skill**：
+执行 `--html` 时，**必须用 `Skill` 工具显式调用 `report` skill**。**关键：如果 `$ARGUMENTS` 包含 `--lang en`，必须把该 flag 一并透传给 `/report`，否则 HTML 会退回中文**。
 
 | 模式 | 调用方式 |
 |------|---------|
-| 普通 (`--html` 不含 `--silent`) | `Skill("report", "TICKER")` |
-| 静默 (`--html --silent`) | `Skill("report", "TICKER --silent")` |
+| 普通 | `Skill("report", "TICKER")` |
+| 静默 | `Skill("report", "TICKER --silent")` |
+| 英文 | `Skill("report", "TICKER --lang en")` |
+| 英文+静默 | `Skill("report", "TICKER --silent --lang en")` |
 
-示例：`/analyze 002851 --html --silent` → `Skill("report", "002851 --silent")`
+示例：
+- `/analyze 002851 --html --silent` → `Skill("report", "002851 --silent")`
+- `/analyze AAPL --html --lang en` → `Skill("report", "AAPL --lang en")`
+- `/analyze NVDA --html --silent --lang en` → `Skill("report", "NVDA --silent --lang en")`
 
 `report` skill 包含完整的 Goldman Sachs 风格规范（色板 `#00338D`、21个区块结构、评级条、KPI 面板、ECharts 图表等）。直接写 HTML 会导致样式不符合投行标准（历史教训：2026-04-14 生成了黑色主题报告）。
 

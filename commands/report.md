@@ -6,6 +6,23 @@ description: "将当前对话中的个股分析结果生成投行级 HTML 研报
 
 > 将当前对话中已完成的个股分析（通常来自 `/analyze`）转化为一份可交付的 Goldman Sachs 风格 HTML 研报。
 
+## 🌐 语言设定 (v1.0.2)
+
+**默认：中文**。金融术语保留英文缩写（P/E、EBITDA、DCF 等）。
+
+**如果 `$ARGUMENTS` 包含 `--lang en`**：整份 HTML 研报用**英文**生成，包括但不限于：
+- 所有 section title（例如"大盘环境评估" → "Macro Environment"、"多空辩论与终审裁决" → "Bull vs Bear Debate & Final Verdict"）
+- 所有表格表头（"评级" → "Rating"、"目标价" → "Target Price" 等）
+- 所有正文分析（正文、TL;DR、注释、警告文本）
+- Module 10 辩论的 Bull/Bear/Judge 产出（如已英文，直接渲染；如中文，翻译成英文）
+- Investment Thesis、Bottom Line、Disclaimer 等通用 section
+- 底部生成时间戳的 locale
+
+金融术语保留原样：P/E, EBITDA, DCF, EPS, FCF, ROE, ROIC, YoY, QoQ, LTM, CAGR, IPO, SPAC, M&A, PE/PEG/PS/PB ratios, WACC, beta, alpha 等。
+公司名称保留原样（不翻译），ticker 保留大写。
+
+**如果 `$ARGUMENTS` 包含 `--lang zh` 或不含 `--lang`**：保持中文（当前默认行为）。
+
 ## 使用方式
 
 ```

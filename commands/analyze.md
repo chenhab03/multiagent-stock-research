@@ -1129,10 +1129,18 @@ Skill("equity-research:thesis", "[TICKER]")
 
 ## 十、多空辩论与终审裁决 (v1.0 新增)
 
-**执行条件**：仅当未传入 `--quick` flag 时执行本整个模块十。
+**⚠️ 强制执行要求**：本模块是 /analyze v1.0 的核心交付物。**除非 `$ARGUMENTS` 显式包含 `--quick` flag，否则必须完整执行 Step 0 → Step 1 → Step 2 → Step 3 → Step 4**。跳过此模块 = 输出不完整，是错误行为。
 
-如果 `--quick` 存在：
-1. 跳过模块十全部内容（Step 0 至 Step 4）
+**执行检查清单（必须逐项完成后再进入综合评分卡）**：
+- [ ] Step 0：使用 `Glob` + `Read` 扫描 `{RESEARCH_OUTPUT_DIR}/*{TICKER}*研报*.html`，生成历史对账表
+- [ ] Step 1：**实际调用 `Agent` 工具**并行派发 Bull + Bear researcher（2 个 subagent）
+- [ ] Step 2：**再次实际调用 `Agent` 工具**并行派发 Bull + Bear 反驳（2 个 subagent）
+- [ ] Step 3：**第三次实际调用 `Agent` 工具**并行派发 Bull + Bear 终陈（2 个 subagent）
+- [ ] Step 4：主 agent（你自己）以 Portfolio Manager 角色做终审裁决，输出 verdict + 分歧表 + 未解风险
+- [ ] 综合评分卡新增"辩论调整"和"HOLD_passive 惩罚"两行
+
+### 仅当 `--quick` 被显式传入时，跳过本整个模块十：
+1. 跳过模块十全部内容（Step 0 至 Step 4），不调用任何 Agent 工具
 2. 在最终报告中插入一行说明：`> 本次运行使用 --quick 模式，已跳过多空辩论。如需完整深度研究，重新运行不带 --quick 的 /analyze {TICKER}。`
 3. 综合评分卡的 "辩论调整" 和 "HOLD_passive 惩罚" 两行标注为 `N/A (--quick mode)`
 4. 建议操作的"止损位"回落到仅用模块七的风险清单（不引用模块十未解风险）

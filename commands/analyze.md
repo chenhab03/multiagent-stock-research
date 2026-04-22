@@ -14,6 +14,12 @@ argument-hint: "[TICKER]"
 ### 输出路径
 本命令所有报告写入 `$RESEARCH_OUTPUT_DIR` 环境变量指定的目录，默认 `~/equity-research/`。后文中所有 `{RESEARCH_OUTPUT_DIR}` 占位符均指向此路径。
 
+### 🌐 语言设定 (v1.0.2)
+
+**默认输出语言：简体中文**（金融术语保留英文缩写如 P/E、EBITDA、DCF、EPS）。
+
+**如果 `$ARGUMENTS` 包含 `--lang en`**：整个报告（所有模块标题、分析内容、表格表头、评分卡、建议操作等）全部用**英文**输出。金融术语保持原样。Module 10 辩论的 Bull/Bear/Judge 产出也用英文。HTML 研报区块文字同步英文化。
+
 ### 输入解析
 - 从 `$ARGUMENTS` 提取股票代码（如 AAPL、NVDA、DUOL）
 - 支持逗号分隔的多股票批量模式（如 `AAPL,NVDA,TSLA` 或 `AAPL, NVDA, TSLA`）
@@ -23,6 +29,7 @@ argument-hint: "[TICKER]"
   - `--silent` — 静默模式：不在控制台输出 Markdown 分析内容，仅生成 HTML 文件到目标目录
   - `--html --silent` — 批量静默模式（推荐搭配多股票使用）
   - `--quick` — 跳过模块十辩论（快速筛查模式），成本降回原始 ~80k tokens
+  - `--lang en` — 输出英文研报（默认中文）；金融术语保留缩写（DCF/P/E/EBITDA 等）
 
 ### 批量模式执行逻辑
 当输入包含多个股票代码时（逗号分隔）：

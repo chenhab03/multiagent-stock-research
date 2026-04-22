@@ -58,12 +58,15 @@ export RESEARCH_OUTPUT_DIR="$HOME/equity-research"   # optional, default ~/equit
 | `/analyze TICKER --html` | Also generate HTML report |
 | `/analyze TICKER --silent` | No console output, progress lines only |
 | `/analyze TICKER --quick` | Skip Module 10 debate (fast screening) |
+| `/analyze TICKER --lang en` | Output the report in English (default: 中文) |
 | `/analyze T1,T2,T3 --html --silent` | Batch mode |
 | `/report TICKER` | Regenerate HTML from latest analysis |
 
 ### Sample output
 
-_Screenshot of an anonymized report goes here once we have one._
+A real rendered report is at [`samples/AAPL-sample-report.html`](samples/AAPL-sample-report.html). Open it in a browser to see the full Goldman-Sachs-style layout, including Module 10 debate (Bull/Bear columns, core disagreement matrix, unresolved risks, composite scorecard with debate adjustments).
+
+> Quick preview without cloning: https://raw.githack.com/chenhab03/multiagent-stock-research/main/samples/AAPL-sample-report.html
 
 ### Architecture
 
@@ -141,8 +144,15 @@ export RESEARCH_OUTPUT_DIR="$HOME/equity-research"   # 可选，默认 ~/equity-
 | `/analyze TICKER --html` | 同上并生成 HTML 研报 |
 | `/analyze TICKER --silent` | 静默模式，不输出 Markdown，仅进度行 |
 | `/analyze TICKER --quick` | 跳过模块十辩论（快速筛查模式） |
+| `/analyze TICKER --lang en` | 输出英文研报（默认中文） |
 | `/analyze T1,T2,T3 --html --silent` | 批量静默模式 |
 | `/report TICKER` | 从最新分析重新生成 HTML |
+
+### 示例报告
+
+真实研报样本：[`samples/AAPL-sample-report.html`](samples/AAPL-sample-report.html)，浏览器打开可看完整高盛风格布局，含 Module 10 辩论区（多空 Top 3、核心分歧矩阵、未解风险、含辩论调整的评分卡）。
+
+> 不克隆也能预览：https://raw.githack.com/chenhab03/multiagent-stock-research/main/samples/AAPL-sample-report.html
 
 ### 方法论
 

@@ -1,6 +1,7 @@
 .env
 .env.local
 *.html
+!samples/*.html
 *.pdf
 .DS_Store
 __pycache__/

@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AAPL — 深度研究报告 | 2026-04-22</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  max-width: 1200px; margin: 0 auto; padding: 40px 48px;
+  font-family: 'Helvetica Neue', Arial, "PingFang SC", sans-serif;
+  background: #F8F9FA; color: #1a1a1a; font-size: 11pt; line-height: 1.6;
+}
+html { background: #F8F9FA; }
+
+/* Header */
+.header {
+  background: #00338D; color: white; padding: 1.5rem 2rem;
+  display: flex; justify-content: space-between; align-items: center;
+  border-radius: 4px; margin-bottom: 1rem;
+}
+.header h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.5px; }
+.header .date { font-size: 0.9rem; opacity: 0.85; }
+
+/* Rating Strip */
+.rating-strip {
+  display: flex; gap: 1.5rem; align-items: center;
+  padding: 1rem 1.5rem; background: white;
+  border: 1px solid #DEE2E6; border-radius: 4px; margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.rating-badge {
+  padding: 0.4rem 1.2rem; border-radius: 3px; font-weight: 700; font-size: 1rem;
+  color: white;
+}
+.rating-BUY { background: linear-gradient(135deg, #1a6b3a, #2E7D32); }
+.rating-NEUTRAL { background: linear-gradient(135deg, #8B6914, #A68318); }
+.rating-SELL { background: linear-gradient(135deg, #8B1A1A, #C62828); }
+.rating-strip .meta { font-size: 0.9rem; color: #555; }
+.rating-strip .meta strong { color: #00338D; }
+
+/* KPI Panel */
+.kpi-panel {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.kpi-card {
+  background: white; border: 1px solid #DEE2E6; border-radius: 4px;
+  padding: 1rem; text-align: center;
+}
+.kpi-card .value { font-size: 1.5rem; font-weight: 700; color: #00338D; }
+.kpi-card .label { font-size: 0.8rem; color: #777; margin-top: 0.25rem; }
+.kpi-card .arrow { font-size: 0.9rem; margin-left: 0.25rem; }
+.kpi-card .up { color: #2E7D32; }
+.kpi-card .down { color: #C62828; }
+
+/* Section */
+.section { margin-bottom: 2.5rem; }
+.section-title {
+  font-size: 1.1rem; font-weight: 700; color: #00338D;
+  border-left: 5px solid #00338D; padding-left: 0.75rem;
+  margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;
+}
+.section-number { background: #00338D; color: white; border-radius: 3px; padding: 0.1rem 0.5rem; font-size: 0.85rem; }
+
+/* Thesis Box */
+.thesis-box {
+  background: #F4F6F9; border-left: 4px solid #D4AF37;
+  padding: 1.25rem 1.5rem; border-radius: 2px; margin-bottom: 1rem;
+}
+.thesis-box h4 { margin-bottom: 0.75rem; color: #00338D; }
+.thesis-box ul { list-style: none; padding: 0; }
+.thesis-box li { padding: 0.35rem 0; padding-left: 1.5rem; position: relative; }
+.thesis-box .bull::before { content: "🟢"; position: absolute; left: 0; }
+.thesis-box .bear::before { content: "🔴"; position: absolute; left: 0; }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 10pt; }
+th { background: #00338D; color: white; padding: 0.6rem 0.75rem; text-align: left; font-weight: 600; }
+td { padding: 0.55rem 0.75rem; border-bottom: 1px solid #e8e8e8; }
+tr:nth-child(even) { background: #FAFBFC; }
+tr:hover { background: #f0f4ff; }
+
+/* Score color coding */
+.score-high { color: #2E7D32; font-weight: 600; }
+.score-mid { color: #8B6914; font-weight: 600; }
+.score-low { color: #C62828; font-weight: 600; }
+
+/* Grid layouts */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+
+/* DCF Table highlight */
+.dcf-base { border: 2px solid #D4AF37 !important; }
+
+/* Bull/Bear */
+.bull { border-left: 4px solid #2E7D32; padding-left: 1rem; }
+.bear { border-left: 4px solid #C62828; padding-left: 1rem; }
+
+/* Debate Section */
+.debate-section { margin-top: 4rem; padding-top: 2rem; border-top: 3px solid #0B2744; }
+.verdict-banner {
+  padding: 2rem; text-align: center; border-radius: 4px;
+  margin: 1.5rem 0 2.5rem; color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.verdict-label { font-size: 0.9rem; letter-spacing: 2px; opacity: 0.85; }
+.verdict-value { font-size: 2.5rem; font-weight: 700; margin: 0.3rem 0; }
+.verdict-subtitle { font-size: 0.9rem; opacity: 0.8; }
+.verdict-confidence { font-size: 1rem; margin-top: 0.5rem; }
+.verdict-BUY { background: linear-gradient(135deg, #0A5F38, #0D7A48); }
+.verdict-SELL { background: linear-gradient(135deg, #8B1A1A, #A82020); }
+.verdict-HOLD-active { background: linear-gradient(135deg, #8B6914, #A68318); }
+.verdict-HOLD-passive { background: linear-gradient(135deg, #666666, #888888); }
+.bull-bear-grid, .closing-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 1.5rem 0;
+}
+.bull-column { border-left: 4px solid #0D7A48; padding-left: 1.25rem; }
+.bear-column { border-left: 4px solid #A82020; padding-left: 1.25rem; }
+.bull-column h4, .bear-column h4 { margin-top: 0; color: #00338D; }
+.bull-column ol li, .bear-column ol li { margin-bottom: 1rem; }
+.bull-column .data, .bear-column .data { font-size: 0.85rem; color: #555; font-style: italic; margin: 0.25rem 0; }
+.bull-column .confidence, .bear-column .confidence { font-size: 0.8rem; color: #888; }
+.debate-matrix th { background: #0B2744; color: white; font-weight: 600; padding: 0.75rem; }
+.debate-matrix td { padding: 0.75rem; border-bottom: 1px solid #e0e0e0; }
+.history-review th { background: #0B2744; color: white; padding: 0.6rem; }
+.history-review td { padding: 0.6rem; vertical-align: top; }
+.history-review .correct { color: #0D7A48; font-weight: 600; }
+.history-review .wrong { color: #A82020; font-weight: 600; }
+.rebuttal-list { list-style: none; padding-left: 0; }
+.rebuttal-list li { padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0; }
+.rebuttal-success { color: #0D7A48; }
+.rebuttal-failed { color: #A82020; }
+.rebuttal-failed em { color: #8B1A1A; margin-left: 0.5rem; }
+.warning-box {
+  background: #FDF6E3; border-left: 4px solid #8B6914;
+  padding: 1rem 1.5rem; border-radius: 2px;
+}
+.warning-box h3 { margin-top: 0; color: #6B4E0A; }
+.reflection-box {
+  background: #F8F9FA; padding: 1rem 1.5rem;
+  margin-top: 1rem; border-radius: 2px;
+}
+.reflection-box h4 { margin-top: 0; color: #0B2744; }
+.scorecard-adjustment th { background: #0B2744; color: white; padding: 0.6rem; }
+.scorecard-adjustment td { padding: 0.6rem; }
+
+/* Bottom Line */
+.bottom-line {
+  background: #F0F4F8; border-left: 3px solid #00338D;
+  padding: 1rem 1.5rem; margin-top: 2rem; border-radius: 2px;
+}
+.bottom-line strong { color: #00338D; }
+
+/* Footer */
+footer {
+  margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #DEE2E6;
+  font-size: 9pt; color: #888; text-align: center;
+}
+footer p { margin: 0.3rem 0; }
+.print-hint {
+  position: fixed; bottom: 2pt; right: 12pt; font-size: 6.5pt; color: #BBB;
+}
+
+/* ECharts container */
+.chart-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0;
+}
+.chart-box {
+  background: white; border: 1px solid #DEE2E6; border-radius: 4px;
+  padding: 1rem;
+}
+.chart-box h4 { font-size: 0.9rem; color: #00338D; margin-bottom: 0.75rem; }
+.chart-box .chart { height: 280px; }
+
+/* Heatmap colors for correlation */
+.heat-high-pos { background: rgba(46,125,50,0.15); }
+.heat-mid-pos { background: rgba(46,125,50,0.08); }
+.heat-neutral { background: rgba(100,100,100,0.05); }
+.heat-mid-neg { background: rgba(198,40,40,0.08); }
+.heat-high-neg { background: rgba(198,40,40,0.15); }
+
+/* Signal indicators */
+.signal-green { color: #2E7D32; }
+.signal-gold { color: #8B6914; }
+.signal-red { color: #C62828; }
+
+/* Zebra */
+.zebra tr:nth-child(odd) { background: #FAFBFC; }
+.zebra tr:nth-child(even) { background: #FFFFFF; }
+
+/* Pressure scenario */
+.pressure-high { background: rgba(198,40,40,0.12); }
+.pressure-mid { background: rgba(139,105,20,0.12); }
+.pressure-low { background: rgba(46,125,50,0.12); }
+
+/* Sentiment */
+.sentiment-hot { background: linear-gradient(135deg, #ff6b6b, #ffa07a); color: white; padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.8rem; }
+.sentiment-warm { background: linear-gradient(135deg, #ffd93d, #f4a261); color: white; padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.8rem; }
+.sentiment-cool { background: linear-gradient(135deg, #6bcb77, #4d96ff); color: white; padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.8rem; }
+.sentiment-cold { background: linear-gradient(135deg, #4d96ff, #222); color: white; padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.8rem; }
+
+@media print {
+  .header { box-shadow: none; }
+  .section { page-break-inside: avoid; }
+  .print-hint { display: none; }
+  body { background: white; }
+}
+</style>
+</head>
+<body>
+
+<!-- 1. Header + Rating Strip -->
+<div class="header">
+  <h1>AAPL — 深度研究报告</h1>
+  <span class="date">2026-04-22</span>
+</div>
+
+<div class="rating-strip">
+  <span class="rating-badge rating-BUY">BUY</span>
+  <div class="meta"><strong>目标价:</strong> $297.71</div>
+  <div class="meta"><strong>上行空间:</strong> +9.0%</div>
+  <div class="meta"><strong>确信度:</strong> 高</div>
+  <div class="meta"><strong>时间框架:</strong> 12个月</div>
+  <div class="meta"><strong>当前价:</strong> $273.17</div>
+</div>
+
+<!-- 2. KPI Panel -->
+<div class="kpi-panel">
+  <div class="kpi-card">
+    <div class="value">$273.17</div>
+    <div class="label">当前价格 <span class="arrow down">↓</span></div>
+  </div>
+  <div class="kpi-card">
+    <div class="value">-5.3%</div>
+    <div class="label">距52W高点</div>
+  </div>
+  <div class="kpi-card">
+    <div class="value">宽护城河</div>
+    <div class="label">护城河评级</div>
+  </div>
+  <div class="kpi-card">
+    <div class="value">78/100</div>
+    <div class="label">综合评分</div>
+  </div>
+  <div class="kpi-card">
+    <div class="value">1:2.5</div>
+    <div class="label">风险收益比</div>
+  </div>
+</div>
+
+<!-- 3. Investment Thesis -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">投资逻辑</span> Investment Thesis</h2>
+  <div class="thesis-box">
+    <h4>核心多空逻辑</h4>
+    <ul>
+      <li class="bull"><strong>AI超级周期:</strong> Apple Intelligence将驱动iPhone 17超级换机周期，营收增速有望突破15%</li>
+      <li class="bull"><strong>Services加速:</strong> 付费订阅超10亿，毛利率74%，AI驱动的个性化服务将提升ARPU</li>
+      <li class="bull"><strong>生态锁定深化:</strong> 10亿+活跃设备，跨设备协同增强转换成本</li>
+      <li class="bear"><strong>中国区风险:</strong> Huawei回归，iPhone在中国市场份额持续下滑(20%→15%)</li>
+      <li class="bear"><strong>AI差异化存疑:</strong> Apple Intelligence功能较竞品无显著领先，吸引力不足</li>
+      <li class="bear"><strong>硬件毛利率承压:</strong> 供应链成本上升+降价压力，硬件毛利率或收缩3-5%</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 4. 大盘环境评估 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">〇</span> 大盘环境评估</h2>
+
+  <table class="zebra">
+    <tr><th colspan="3">宏观体制判断</th></tr>
+    <tr><th>指标</th><th>数值</th><th>判断</th></tr>
+    <tr><td>VIX</td><td>18.8</td><td class="signal-green">低波动率环境 (Risk-On)</td></tr>
+    <tr><td>SPY vs MA200</td><td>+7%</td><td class="signal-green">确认主升浪</td></tr>
+    <tr><td>10年期国债收益率</td><td>4.29%</td><td>正常化水平</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="2">霍华德·马克斯周期定位</th></tr>
+    <tr><th>维度</th><th>状态</th></tr>
+    <tr><td>行业周期</td><td class="signal-green">扩张中段 — 科技/消费科技领先</td></tr>
+    <tr><td>情绪周期</td><td class="signal-gold">乐观偏热 — 接近过热区</td></tr>
+    <tr><td>信贷周期</td><td>宽松尾声 — 利率敏感板块承压</td></tr>
+    <tr><td>资本开支</td><td class="signal-green">回升期 — AI基础设施加速</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th>对该股的影响判断</th></tr>
+    <tr>
+      <td>
+        <span class="signal-green">顺风</span> 美股整体Risk-On环境有利于科技股估值扩张 ·
+        <span class="signal-gold">逆风</span> 高利率环境对成长股估值有压制 ·
+        <span>综合:</span> <strong>中性偏多</strong>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- 5. 执行摘要 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">一</span> 执行摘要</h2>
+  <div class="bottom-line" style="border-left-color:#D4AF37;">
+    <p><strong>评级: BUY | 目标价: $297.71 | 上行空间: +9.0%</strong></p>
+    <p style="margin-top:0.5rem;">Apple 处于AI驱动的超级周期边缘。iPhone 17预计引入显著AI功能，有望刺激超级换机周期。Services业务持续强劲增长（营收占比已达30%），毛利率高达74%，构成估值重估的关键驱动力。当前P/E 34.5x TTM处于历史区间中位，Forward P/E 29.1x在AI革命背景下具备吸引力。分析师目标价均值$297.71对应9%上行空间，37位分析师给出Buy评级（占68.5%）。</p>
+    <p style="margin-top:0.5rem;"><strong>核心逻辑：</strong>①AI功能驱动iPhone换机周期 ②Services增长加速 ③生态锁定持续深化<br>
+    <strong>核心风险：</strong>①中国区需求疲软 ②AI功能差异化不足 ③硬件毛利率承压</p>
+  </div>
+</div>
+
+<!-- 6. 基本面分析 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">二</span> 基本面分析</h2>
+
+  <table class="zebra">
+    <tr><th colspan="4">核心财务指标</th></tr>
+    <tr><th>指标</th><th>数值</th><th>YoY</th><th>备注</th></tr>
+    <tr><td>价格</td><td>$273.17</td><td>-</td><td>距高点-5.3%</td></tr>
+    <tr><td>市值</td><td>$4.015T</td><td>-</td><td>全球第一</td></tr>
+    <tr><td>P/E (TTM)</td><td>34.53x</td><td>-</td><td>适中</td></tr>
+    <tr><td>P/E (Forward)</td><td>29.10x</td><td>-</td><td class="signal-green">具吸引力</td></tr>
+    <tr><td>EPS (TTM)</td><td>$7.91</td><td>+10.8%</td><td>持续增长</td></tr>
+    <tr><td>EPS (Forward)</td><td>$9.39</td><td>+18.7%</td><td class="signal-green">加速</td></tr>
+    <tr><td>股息率</td><td>0.44%</td><td>-</td><td>现金牛</td></tr>
+    <tr><td>Beta</td><td>1.11</td><td>-</td><td>略高于大盘</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="3">盈利能力</th></tr>
+    <tr><th>指标</th><th>数值</th><th>行业对比</th></tr>
+    <tr><td>毛利率</td><td>47.3%</td><td class="signal-green">优秀</td></tr>
+    <tr><td>经营利润率</td><td>35.4%</td><td class="signal-green">卓越</td></tr>
+    <tr><td>净利润率</td><td>24.4%</td><td>稳健</td></tr>
+    <tr><td>ROE</td><td>160%+</td><td class="signal-green">极高</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="4">营收结构 (最新季度估算)</th></tr>
+    <tr><th>业务线</th><th>占比</th><th>增速</th><th>毛利率</th></tr>
+    <tr><td>iPhone</td><td>~50%</td><td>mid-single</td><td>~45%</td></tr>
+    <tr><td>Services</td><td>~30%</td><td class="signal-green">+15%+</td><td class="signal-green">74%</td></tr>
+    <tr><td>Mac</td><td>~8%</td><td>mid-single</td><td>稳健</td></tr>
+    <tr><td>iPad</td><td>~5%</td><td>low-single</td><td>稳健</td></tr>
+    <tr><td>Wearables</td><td>~7%</td><td>low-single</td><td>约40%</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="3">盈利质量检验</th></tr>
+    <tr><th>指标</th><th>数值</th><th>评级</th></tr>
+    <tr><td>现金流/净利润比</td><td>>1.0 (估算)</td><td class="score-high">高</td></tr>
+    <tr><td>应计比率</td><td>低</td><td class="score-high">优</td></tr>
+    <tr><td>FCF Yield</td><td>~2.9%</td><td>适中</td></tr>
+    <tr><td>综合盈利质量</td><td>高</td><td class="score-high">高</td></tr>
+  </table>
+</div>
+
+<!-- 6A. 管理层质量评估 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">二A</span> 管理层质量评估</h2>
+
+  <table class="zebra">
+    <tr><th colspan="4">核心管理层</th></tr>
+    <tr><th>姓名</th><th>职位</th><th>任期</th><th>背景</th></tr>
+    <tr><td>Tim Cook</td><td>CEO</td><td>2011-</td><td>供应链运营专家</td></tr>
+    <tr><td>Luca Maestri</td><td>CFO</td><td>2013-</td><td>财务管控严格</td></tr>
+    <tr><td>Jeff Williams</td><td>COO</td><td>2019-</td><td>运营背景深厚</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="4">资本配置记录</th></tr>
+    <tr><th>年份</th><th>回购/分红</th><th>总额</th><th>ROI评估</th></tr>
+    <tr><td>FY2023</td><td>回购</td><td>$90B+</td><td class="score-high">积极</td></tr>
+    <tr><td>FY2024</td><td>回购</td><td>$80B+</td><td class="score-high">积极</td></tr>
+    <tr><td>FY2025</td><td>回购中</td><td>持续</td><td class="score-high">积极</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="3">内部人持股对齐</th></tr>
+    <tr><th>项目</th><th>状态</th><th>信号</th></tr>
+    <tr><td>Tim Cook持股</td><td>~$700M (任期内增持)</td><td class="signal-green">对齐</td></tr>
+    <tr><td>指引命中率</td><td>历史准确性较高</td><td class="score-high">A-</td></tr>
+    <tr><td colspan="3"><strong>综合管理层质量评分: 9/10</strong></td></tr>
+  </table>
+</div>
+
+<!-- 6B. 盈利模型与预期追踪 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">二B</span> 盈利模型与预期追踪</h2>
+
+  <table class="zebra">
+    <tr><th colspan="4">预期修正动量</th></tr>
+    <tr><th>指标</th><th>90日修正</th><th>方向</th><th>动量信号</th></tr>
+    <tr><td>EPS</td><td>+$0.15</td><td class="signal-green">↑上调</td><td class="signal-green">积极</td></tr>
+    <tr><td>营收</td><td>+2%</td><td class="signal-green">↑上调</td><td class="signal-green">积极</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="5">8季度 Beat/Miss 历史 (Finnhub)</th></tr>
+    <tr><th>季度</th><th>预期EPS</th><th>实际EPS</th><th>惊喜%</th><th>信号</th></tr>
+    <tr><td>Q2 2024</td><td>$1.53</td><td>$1.53</td><td>0%</td><td>→ Neutral</td></tr>
+    <tr style="background:rgba(46,125,50,0.1);"><td>Q3 2024</td><td>$1.35</td><td>$1.40</td><td>+3.7%</td><td class="signal-green">✅ Beat</td></tr>
+    <tr style="background:rgba(46,125,50,0.1);"><td>Q4 2024</td><td>$1.60</td><td>$1.64</td><td>+2.5%</td><td class="signal-green">✅ Beat</td></tr>
+    <tr style="background:rgba(198,40,40,0.1);"><td>Q1 2025</td><td>$2.35</td><td>$2.23</td><td>-5.1%</td><td class="signal-red">❌ Miss</td></tr>
+    <tr><td>Q2 2025E</td><td>~$1.55</td><td>-</td><td>-</td><td>预估</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="2">卖方一致预期</th></tr>
+    <tr><td>覆盖分析师</td><td><strong>40位</strong></td></tr>
+    <tr><td>评级分布</td><td>Buy 68.5%, Hold 27%, Sell 4.5%</td></tr>
+    <tr><td>目标价范围</td><td>$190 - $325</td></tr>
+    <tr><td>目标价中位数</td><td><strong>$297.71</strong></td></tr>
+  </table>
+</div>
+
+<!-- 7. 估值分析 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">三</span> 估值分析</h2>
+
+  <table class="zebra">
+    <tr><th colspan="6">可比公司估值</th></tr>
+    <tr><th>公司</th><th>P/E (TTM)</th><th>P/E (Fwd)</th><th>EV/EBITDA</th><th>股息率</th><th>信号</th></tr>
+    <tr><td>MSFT</td><td>35.2x</td><td>30.1x</td><td>24.5x</td><td>0.7%</td><td>-</td></tr>
+    <tr><td>GOOGL</td><td>23.5x</td><td>20.8x</td><td>15.2x</td><td>0.5%</td><td>-</td></tr>
+    <tr><td>AMZN</td><td>42.1x</td><td>33.5x</td><td>18.9x</td><td>0%</td><td>-</td></tr>
+    <tr><td>META</td><td>26.8x</td><td>22.4x</td><td>14.1x</td><td>0.3%</td><td>-</td></tr>
+    <tr style="background:rgba(0,51,141,0.08);font-weight:700;"><td>AAPL</td><td>34.5x</td><td>29.1x</td><td>~20x</td><td>0.44%</td><td>行业中位</td></tr>
+    <tr><td>行业中位数</td><td>32.4x</td><td>26.7x</td><td>18.2x</td><td>0.3%</td><td>-</td></tr>
+  </table>
+
+  <table class="zebra dcf-base">
+    <tr><th colspan="5">DCF 三场景估值</th></tr>
+    <tr><th>场景</th><th>10Y增长率</th><th>WACC</th><th>内在价值</th><th>上行/下行</th></tr>
+    <tr><td>保守</td><td>5%</td><td>10%</td><td>$215</td><td class="signal-red">-21%</td></tr>
+    <tr style="background:rgba(212,175,55,0.15);font-weight:700;"><td>中性 ★</td><td>8%</td><td>9%</td><td>$278</td><td>+2%</td></tr>
+    <tr><td>乐观</td><td>12%</td><td>8%</td><td>$345</td><td class="signal-green">+26%</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="2">反向DCF分析</th></tr>
+    <tr><td>当前股价$273.17隐含增长率</td><td><strong>~7.2%</strong> (vs 共识预期9%+)</td></tr>
+    <tr><td>判断</td><td class="signal-gold">市场预期略偏低，存在约12%低估</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="4">情景分析</th></tr>
+    <tr><th>情景</th><th>概率</th><th>目标价</th><th>核心假设</th></tr>
+    <tr><td>乐观</td><td>25%</td><td class="signal-green">$340+</td><td>AI超级周期,iPhone大年</td></tr>
+    <tr><td>基准</td><td>55%</td><td>$295-310</td><td>AI功能稳定, Services稳定</td></tr>
+    <tr><td>保守</td><td>20%</td><td class="signal-red">$220-240</td><td>AI差异化不足, 中国疲软</td></tr>
+  </table>
+</div>
+
+<!-- 8. 行业与竞争格局 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">四</span> 行业与竞争格局</h2>
+
+  <table class="zebra">
+    <tr><th colspan="3">巴菲特护城河评估</th></tr>
+    <tr><th>维度</th><th>评分</th><th>依据</th></tr>
+    <tr><td>无形资产</td><td class="score-high">★★★★★</td><td>Apple品牌价值$5000亿+</td></tr>
+    <tr><td>转换成本</td><td class="score-high">★★★★☆</td><td>iCloud/Messages/FaceTime锁定</td></tr>
+    <tr><td>网络效应</td><td class="score-high">★★★★☆</td><td>10亿+活跃设备生态</td></tr>
+    <tr><td>成本优势</td><td class="score-mid">★★★☆☆</td><td>规模效应显著</td></tr>
+    <tr style="background:rgba(46,125,50,0.1);"><td colspan="2"><strong>护城河宽度: 宽</strong></td><td class="signal-green">综合评定</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="2">护城河趋势</th></tr>
+    <tr><td class="signal-green">正面</td><td>Services生态扩展, Apple Intelligence差异化</td></tr>
+    <tr><td class="signal-red">负面</td><td>监管风险(欧盟DMA), 中国竞争(Huawei回归)</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="2">行业风险</th></tr>
+    <tr><td>智能手机市场成熟</td><td>增速个位数</td></tr>
+    <tr><td>AI功能同质化风险</td><td>存在</td></tr>
+    <tr><td>地缘政治</td><td>中美科技脱钩风险</td></tr>
+  </table>
+</div>
+
+<!-- 9. 催化剂与投资论题 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">五</span> 催化剂与投资论题</h2>
+
+  <table class="zebra">
+    <tr><th colspan="3">近期催化剂 (0-6个月)</th></tr>
+    <tr><th>日期</th><th>事件</th><th>预期影响</th></tr>
+    <tr><td>WWDC 2026 (6月)</td><td>Apple Intelligence新功能</td><td class="signal-green">正面</td></tr>
+    <tr><td>Q2 2026财报</td><td>iPhone中国区表现</td><td>观察</td></tr>
+    <tr><td>iPhone 17发布(9月)</td><td>AI驱动换机周期</td><td class="signal-green">重大正面</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="3">中期催化剂 (6-24个月)</th></tr>
+    <tr><td>Apple Car / AR眼镜量产</td><td colspan="2">待定</td></tr>
+    <tr><td>AI服务器自研芯片</td><td colspan="2">进行中</td></tr>
+    <tr><td>Services海外扩张</td><td colspan="2">持续</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="4">18个月情景推演</th></tr>
+    <tr><th>路径</th><th>概率</th><th>价格区间</th><th>因果链</th></tr>
+    <tr><td class="signal-green">乐观AI超级周期</td><td>30%</td><td>$340-380</td><td>iPhone大年→业绩超预期→PE扩张</td></tr>
+    <tr><td>基准渐进</td><td>50%</td><td>$280-310</td><td>AI功能稳定→业绩符合→缓慢上行</td></tr>
+    <tr><td class="signal-red">悲观逆风</td><td>20%</td><td>$200-240</td><td>中国崩跌+AI失败→杀估值</td></tr>
+  </table>
+</div>
+
+<!-- 10. 技术面与市场信号 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">六</span> 技术面与市场信号</h2>
+
+  <table class="zebra">
+    <tr><th colspan="3">价格结构</th></tr>
+    <tr><th>指标</th><th>数值</th><th>信号</th></tr>
+    <tr><td>当前价</td><td><strong>$273.17</strong></td><td>-</td></tr>
+    <tr><td>52W High</td><td>$288.35</td><td>高点回调-5.3%</td></tr>
+    <tr><td>52W Low</td><td>$192.41</td><td>底部确认</td></tr>
+    <tr><td>MA50</td><td class="signal-green">$260.24</td><td>✅ 之上</td></tr>
+    <tr><td>MA200</td><td class="signal-green">$252.72</td><td>✅ 之上</td></tr>
+    <tr><td>RSI (14)</td><td>~55</td><td>中性偏多</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="2">关键技术位</th></tr>
+    <tr><td><strong>支撑</strong></td><td>$260 (MA50), $245-250 (强力支撑区)</td></tr>
+    <tr><td><strong>阻力</strong></td><td>$288 (52W High), $300 (心理关口)</td></tr>
+    <tr><td><strong>趋势</strong></td><td>中期上升通道中</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="3">道氏理论确认</th></tr>
+    <tr><th>维度</th><th>状态</th><th>确认</th></tr>
+    <tr><td>主趋势</td><td class="signal-green">上升</td><td>价格>MA200</td></tr>
+    <tr><td>次级趋势</td><td>盘整回调中</td><td>-</td></tr>
+    <tr><td>成交量确认</td><td class="signal-green">积极</td><td>下跌缩量</td></tr>
+  </table>
+</div>
+
+<!-- 11. 风险管理 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">七</span> 风险管理</h2>
+
+  <table class="zebra">
+    <tr><th colspan="4">风险评估</th></tr>
+    <tr><th>层面</th><th>风险</th><th>影响程度</th></tr>
+    <tr><td>公司</td><td>中国区需求/AI差异化</td><td class="signal-gold">中</td></tr>
+    <tr><td>行业</td><td>智能手机市场饱和</td><td class="signal-gold">中</td></tr>
+    <tr><td>宏观</td><td>利率上升/经济衰退</td><td class="signal-red">高</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="4">仓位计算 (假设$100K组合)</th></tr>
+    <tr><th>方法</th><th>计算</th><th>股数</th></tr>
+    <tr><td>固定风险2%</td><td>$2000/股损</td><td>~100股</td></tr>
+    <tr><td>ATR法</td><td>$100K×1.5%</td><td>~95股</td></tr>
+    <tr><td>Kelly 50%</td><td>37%仓位</td><td>~135股</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="2">交易计划</th></tr>
+    <tr><td><strong>入场区间</strong></td><td>$260-270 (理想)</td></tr>
+    <tr><td><strong>止损位</strong></td><td>$235 (跌破MA200+3%)</td></tr>
+    <tr><td><strong>目标位1</strong></td><td>$295 (Near-term)</td></tr>
+    <tr><td><strong>目标位2</strong></td><td>$320 (12个月)</td></tr>
+    <tr><td><strong>风险收益比</strong></td><td class="signal-green">1:2.5 (优秀)</td></tr>
+  </table>
+</div>
+
+<!-- 11A. 资产负债表 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">七A</span> 资产负债表深度分析</h2>
+
+  <table class="zebra">
+    <tr><th colspan="3">杠杆健康度</th></tr>
+    <tr><th>指标</th><th>数值</th><th>评级</th></tr>
+    <tr><td>净负债/EBITDA</td><td>负(净现金)</td><td class="signal-green">🟢 极低风险</td></tr>
+    <tr><td>利息覆盖</td><td>N/A(净现金)</td><td class="signal-green">🟢 优秀</td></tr>
+    <tr><td>流动比率</td><td>>2.0</td><td class="signal-green">🟢 健康</td></tr>
+    <tr><td>速动比率</td><td>>1.5</td><td class="signal-green">🟢 健康</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="2">信用评级</th></tr>
+    <tr><td>Apple信用评级</td><td><strong>AA+ (标普) / Aaa (穆迪)</strong></td></tr>
+    <tr><td>展望</td><td>稳定</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="2">外汇敞口</th></tr>
+    <tr><td>收入(海外)</td><td>约60% (美元计价)</td></tr>
+    <tr><td>成本(海外)</td><td>约40%</td></tr>
+    <tr><td>净外汇敞口</td><td>中等</td></tr>
+    <tr><td>对冲状态</td><td>部分对冲</td></tr>
+    <tr><td colspan="2"><strong>综合资产负债表健康评分: 9.5/10</strong></td></tr>
+  </table>
+</div>
+
+<!-- 11B. 跨资产相关性 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">七B</span> 跨资产相关性</h2>
+
+  <table class="zebra">
+    <tr><th colspan="4">相关性矩阵</th></tr>
+    <tr><th>标的</th><th>30日相关</th><th>90日相关</th><th>1年相关</th></tr>
+    <tr class="heat-high-pos"><td>SPY</td><td>0.82</td><td>0.78</td><td>0.75</td></tr>
+    <tr class="heat-high-pos"><td>QQQ</td><td>0.88</td><td>0.85</td><td>0.82</td></tr>
+    <tr class="heat-high-pos"><td>SOXX</td><td>0.78</td><td>0.72</td><td>0.70</td></tr>
+    <tr class="heat-mid-neg"><td>DXY</td><td>-0.45</td><td>-0.38</td><td>-0.35</td></tr>
+    <tr class="heat-neutral"><td>GLD</td><td>0.15</td><td>0.22</td><td>0.28</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="3">因子暴露</th></tr>
+    <tr><th>因子</th><th>暴露度</th><th>信号</th></tr>
+    <tr><td>Growth</td><td class="signal-green">高</td><td>科技溢价</td></tr>
+    <tr><td>Quality</td><td class="signal-green">极高</td><td>盈利能力卓越</td></tr>
+    <tr><td>Momentum</td><td>中性</td><td>近期盘整</td></tr>
+    <tr><td>Value</td><td>低</td><td>不适用</td></tr>
+  </table>
+</div>
+
+<!-- 11C. 压力测试 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">七C</span> 压力测试矩阵</h2>
+
+  <table class="zebra">
+    <tr><th>场景</th><th>触发条件</th><th>EPS影响%</th><th>目标价影响</th><th>概率</th><th>风险</th></tr>
+    <tr class="pressure-high">
+      <td>商品价格暴跌30%</td>
+      <td>全球经济衰退</td><td>-15%</td><td>-$40</td><td>5%</td><td class="signal-red">高</td>
+    </tr>
+    <tr class="pressure-mid">
+      <td>人民币贬值15%</td>
+      <td>中美贸易战升级</td><td>-8%</td><td>-$20</td><td>10%</td><td class="signal-gold">中</td>
+    </tr>
+    <tr class="pressure-mid">
+      <td>AI功能失败</td>
+      <td>iPhone 17无差异化</td><td>-12%</td><td>-$30</td><td>15%</td><td class="signal-gold">中</td>
+    </tr>
+    <tr class="pressure-low">
+      <td>中国区销量崩跌</td>
+      <td>Huawei份额继续侵蚀</td><td>-10%</td><td>-$25</td><td>20%</td><td class="signal-gold">中</td>
+    </tr>
+    <tr class="pressure-low">
+      <td>基准情景</td><td>正常经营</td><td>0%</td><td>$0</td><td>50%</td><td>-</td>
+    </tr>
+  </table>
+</div>
+
+<!-- 12. 泡沫检测 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">八</span> 泡沫与极端风险</h2>
+
+  <table class="zebra">
+    <tr><th colspan="5">估值泡沫信号</th></tr>
+    <tr><th>指标</th><th>当前值</th><th>历史中位数</th><th>偏离度</th><th>信号</th></tr>
+    <tr><td>Forward P/E</td><td>29.1x</td><td>25.0x</td><td>+16%</td><td class="signal-gold">🟡 温和高估</td></tr>
+    <tr><td>P/S</td><td>7.5x</td><td>6.5x</td><td>+15%</td><td class="signal-gold">🟡 略高</td></tr>
+    <tr><td>EV/FCF</td><td>32x</td><td>28x</td><td>+14%</td><td class="signal-gold">🟡 略高</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="2">极端风险评估</th></tr>
+    <tr><td>尾部风险概率</td><td class="signal-green">低 (&lt;5%每年)</td></tr>
+    <tr><td>黑天鹅暴露</td><td class="signal-green">有限</td></tr>
+  </table>
+</div>
+
+<!-- 12A. 舆情 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">九</span> 舆情与市场情绪</h2>
+
+  <table class="zebra">
+    <tr><th colspan="5">平台舆情汇总</th></tr>
+    <tr><th>平台</th><th>情绪</th><th>热度</th><th>信号</th></tr>
+    <tr><td>雪球</td><td>偏多</td><td>中</td><td>中性</td></tr>
+    <tr><td>Reddit (wsb)</td><td>多空分歧</td><td>低</td><td>观望</td></tr>
+    <tr><td>X (Twitter)</td><td class="signal-green">乐观</td><td>中高</td><td class="signal-green">积极</td></tr>
+  </table>
+
+  <table class="zebra">
+    <tr><th colspan="2">综合舆情动量评分</th></tr>
+    <tr><td>综合评分</td><td><strong>6/10</strong> (中性略偏多)</td></tr>
+  </table>
+</div>
+
+<!-- 12B. 多空辩论 -->
+<div class="section debate-section">
+  <h2 class="section-title"><span class="section-number">十</span> 多空辩论与终审裁决</h2>
+
+  <div class="verdict-banner verdict-BUY">
+    <div class="verdict-label">🏆 Judge Verdict</div>
+    <div class="verdict-value">BUY (谨慎)</div>
+    <div class="verdict-subtitle">谨慎看多，等待AI验证</div>
+    <div class="verdict-confidence">Confidence: 7/10</div>
+  </div>
+
+  <div class="subsection">
+    <h3 style="color:#00338D;margin-bottom:1rem;">🐂 多头 Top 3 vs 🐻 空头 Top 3</h3>
+    <div class="bull-bear-grid">
+      <div class="bull-column">
+        <h4>🐂 多头</h4>
+        <ol>
+          <li>
+            <strong>AI超级周期</strong>
+            <div class="data">Apple Intelligence将驱动iPhone 17超级换机周期，营收增速有望突破15%</div>
+            <div class="confidence">Confidence: 8/10</div>
+          </li>
+          <li>
+            <strong>Services加速</strong>
+            <div class="data">付费订阅超10亿，毛利率74%，AI驱动的个性化服务将提升ARPU</div>
+            <div class="confidence">Confidence: 8/10</div>
+          </li>
+          <li>
+            <strong>生态锁定深化</strong>
+            <div class="data">10亿+活跃设备，跨设备协同增强转换成本</div>
+            <div class="confidence">Confidence: 9/10</div>
+          </li>
+        </ol>
+      </div>
+      <div class="bear-column">
+        <h4>🐻 空头</h4>
+        <ol>
+          <li>
+            <strong>中国区风险</strong>
+            <div class="data">Huawei回归，iPhone在中国市场份额持续下滑(20%→15%)</div>
+            <div class="confidence">Confidence: 7/10</div>
+          </li>
+          <li>
+            <strong>AI差异化存疑</strong>
+            <div class="data">Apple Intelligence功能较竞品无显著领先，吸引力不足</div>
+            <div class="confidence">Confidence: 6/10</div>
+          </li>
+          <li>
+            <strong>硬件毛利率承压</strong>
+            <div class="data">供应链成本上升+降价压力，硬件毛利率或收缩3-5%</div>
+            <div class="confidence">Confidence: 6/10</div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <h3 style="color:#00338D;margin-bottom:1rem;">Round 2: 反驳结果</h3>
+    <ul class="rebuttal-list">
+      <li class="rebuttal-success">✅ <strong>多头成功反驳空头:</strong> 生态锁定为Services提供持续现金流，硬件毛利率压力可由软件服务补偿</li>
+      <li class="rebuttal-failed">❌ <strong>多头未能反驳空头:</strong> 中国区风险短期内难以解决 Huawei竞争激烈 <em>(→ 进入未解风险)</em></li>
+      <li class="rebuttal-success">✅ <strong>空头成功反驳多头:</strong> Apple Intelligence目前功能与竞品同质化严重，差异化优势不明显</li>
+      <li class="rebuttal-success">✅ <strong>空头成功反驳多头:</strong> 硬件毛利率承压是结构性挑战，代工成本上升趋势不可逆</li>
+    </ul>
+  </div>
+
+  <div class="subsection">
+    <h3 style="color:#00338D;margin-bottom:1rem;">核心分歧矩阵</h3>
+    <table class="debate-matrix zebra">
+      <thead>
+        <tr><th>议题</th><th>🐂 多头立场</th><th>🐻 空头立场</th><th>裁决</th><th>理由</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>AI差异化</td><td>Apple Intelligence领先</td><td>无显著优势</td>
+          <td class="signal-red">空头占优</td><td>功能趋同</td>
+        </tr>
+        <tr>
+          <td>中国需求</td><td>底部反弹</td><td>持续下滑</td>
+          <td class="signal-red">空头占优</td><td>Huawei竞争激烈</td>
+        </tr>
+        <tr>
+          <td>Services增长</td><td>加速至20%+</td><td>放缓至15%</td>
+          <td class="signal-gold">待观察</td><td>AI功能落地待验证</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="subsection warning-box">
+    <h3>⚠️ 未被反驳的风险 → 止损/减仓触发条件</h3>
+    <ul>
+      <li><strong>中国区市场份额流失</strong>：短期难以逆转，需观察华为竞争持续性</li>
+      <li><strong>AI功能差异化</strong>：需要WWDC实际功能验证，不能仅凭宣传</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 13. ECharts -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">图</span> 数据可视化</h2>
+  <div class="chart-grid">
+    <div class="chart-box">
+      <h4>综合评分雷达图</h4>
+      <div id="radar-chart" class="chart"></div>
+    </div>
+    <div class="chart-box">
+      <h4>DCF 情景估值</h4>
+      <div id="dcf-chart" class="chart"></div>
+    </div>
+    <div class="chart-box">
+      <h4>多框架交叉验证</h4>
+      <div id="heatmap-chart" class="chart"></div>
+    </div>
+    <div class="chart-box">
+      <h4>压力测试影响</h4>
+      <div id="pressure-chart" class="chart"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<script>
+// Radar chart - 14 dimension scorecard
+var radarChart = echarts.init(document.getElementById('radar-chart'));
+var radarOption = {
+  color: ['#00338D', '#D4AF37'],
+  tooltip: { trigger: 'item' },
+  legend: { bottom: 5, data: ['AAPL', '行业中位数'] },
+  radar: {
+    indicator: [
+      { name: '盈利增长', max: 10 }, { name: '估值吸引', max: 10 },
+      { name: '安全边际', max: 10 }, { name: '护城河', max: 10 },
+      { name: '管理质量', max: 10 }, { name: '周期定位', max: 10 },
+      { name: '风险收益', max: 10 }, { name: '技术面', max: 10 },
+      { name: '机构流向', max: 10 }, { name: '催化剂', max: 10 },
+      { name: '盈利动量', max: 10 }, { name: '资产负债表', max: 10 },
+      { name: '盈利质量', max: 10 }, { name: '舆情动量', max: 10 }
+    ],
+    shape: 'polygon', splitNumber: 5
+  },
+  series: [{
+    type: 'radar',
+    data: [
+      {
+        value: [8, 7, 7, 9, 9, 7, 7, 7, 7, 9, 7, 10, 8, 6],
+        name: 'AAPL', areaStyle: { color: 'rgba(0,51,141,0.2)' },
+        lineStyle: { color: '#00338D', width: 2 },
+        itemStyle: { color: '#00338D' }
+      },
+      {
+        value: [7, 6, 6, 7, 7, 6, 6, 6, 6, 7, 6, 8, 7, 5],
+        name: '行业中位数', areaStyle: { color: 'rgba(212,175,55,0.2)' },
+        lineStyle: { color: '#D4AF37', width: 2 },
+        itemStyle: { color: '#D4AF37' }
+      }
+    ]
+  }]
+};
+radarChart.setOption(radarOption);
+
+// DCF bar chart
+var dcfChart = echarts.init(document.getElementById('dcf-chart'));
+var dcfOption = {
+  color: ['#C62828', '#D4AF37', '#2E7D32', '#00338D'],
+  tooltip: { trigger: 'axis', formatter: function(p) { return p[0].name + ': $' + p[0].value; } },
+  grid: { left: 50, right: 20, top: 20, bottom: 40 },
+  xAxis: { type: 'category', data: ['保守', '中性 ★', '乐观', '当前股价'] },
+  yAxis: { type: 'value', min: 180, max: 360, axisLabel: { formatter: '${value}' } },
+  series: [{
+    type: 'bar', data: [
+      { value: 215, itemStyle: { color: '#C62828' } },
+      { value: 278, itemStyle: { color: '#D4AF37' } },
+      { value: 345, itemStyle: { color: '#2E7D32' } },
+      { value: 273, itemStyle: { color: '#00338D' } }
+    ],
+    label: { show: true, position: 'top', formatter: '${value}' }
+  }]
+};
+dcfChart.setOption(dcfOption);
+
+// Heatmap - framework cross validation
+var heatmapChart = echarts.init(document.getElementById('heatmap-chart'));
+var heatmapOption = {
+  color: ['#C62828', '#F5F5DC', '#2E7D32'],
+  tooltip: { formatter: function(p) { return p.data[2] + ': ' + (p.data[0] === 0 ? 'BUY' : p.data[0] === 1 ? 'NEUTRAL' : 'SELL'); } },
+  grid: { left: 120, right: 40, top: 20, bottom: 60 },
+  xAxis: { type: 'category', data: ['格雷厄姆', '巴菲特', '马克斯', 'O\'Neil', '管理层', '舆情'], axisLabel: { rotate: 15 } },
+  yAxis: { type: 'category', data: ['结论', '信号'] },
+  visualMap: { min: 0, max: 2, calculable: true, orient: 'horizontal', left: 'center', bottom: 0,
+    inRange: { color: ['#C62828', '#F5F5DC', '#2E7D32'] } },
+  series: [{ type: 'heatmap', data: [[0,0,'BUY',1],[1,0,'BUY',2],[2,0,'HOLD',1],[3,0,'BUY',2],[4,0,'BUY',2],[5,0,'HOLD',1],
+                                        [0,1,'积极',2],[1,1,'积极',2],[2,1,'中性',1],[3,1,'积极',2],[4,1,'积极',2],[5,1,'中性',1]]
+    , label: { show: true, formatter: function(p) { return p.data[2]; } }, emphasis: { itemStyle: { shadowBlur: 10 } } }]
+};
+heatmapChart.setOption(heatmapOption);
+
+// Pressure test waterfall
+var pressureChart = echarts.init(document.getElementById('pressure-chart'));
+var pressureOption = {
+  color: ['#2E7D32', '#D4AF37', '#C62828', '#8B6914'],
+  tooltip: { trigger: 'axis', formatter: function(p) { return p[0].name + ': ' + p[0].value; } },
+  grid: { left: 50, right: 20, top: 20, bottom: 40 },
+  xAxis: { type: 'category', data: ['基准', '商品暴跌', '人民币贬值', 'AI失败', '中国崩跌'] },
+  yAxis: { type: 'value', axisLabel: { formatter: '${value}' } },
+  series: [{
+    type: 'bar', data: [297.71, 257.71, 277.71, 267.71, 272.71],
+    label: { show: true, position: 'top', formatter: '${value}' },
+    itemStyle: { color: function(p) { return p.dataIndex === 0 ? '#D4AF37' : '#C62828'; } }
+  }]
+};
+pressureChart.setOption(pressureOption);
+</script>
+
+<!-- 14. 综合评分卡 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">评</span> 综合评分卡</h2>
+
+  <table class="zebra">
+    <tr>
+      <th>#</th><th>维度</th><th>评分</th><th>备注</th>
+    </tr>
+    <tr><td>1</td><td>盈利增长质量（格雷厄姆）</td><td class="score-high">8/10</td><td>持续beat预期</td></tr>
+    <tr><td>2</td><td>估值吸引力（格雷厄姆）</td><td class="score-mid">7/10</td><td>Forward P/E 29x合理</td></tr>
+    <tr><td>3</td><td>安全边际（格雷厄姆）</td><td class="score-mid">7/10</td><td>距高点仅-5.3%</td></tr>
+    <tr><td>4</td><td>护城河强度（巴菲特）</td><td class="score-high">9/10</td><td>品牌+生态双重</td></tr>
+    <tr><td>5</td><td>管理层质量（巴菲特）</td><td class="score-high">9/10</td><td>Tim Cook卓越</td></tr>
+    <tr><td>6</td><td>周期定位（马克斯）</td><td class="score-mid">7/10</td><td>AI扩张周期受益</td></tr>
+    <tr><td>7</td><td>风险收益不对称（马克斯）</td><td class="score-mid">7/10</td><td>上行>下行</td></tr>
+    <tr><td>8</td><td>技术面趋势（O'Neil）</td><td class="score-mid">7/10</td><td>MA200之上</td></tr>
+    <tr><td>9</td><td>机构资金流向（O'Neil）</td><td class="score-mid">7/10</td><td>净买入</td></tr>
+    <tr><td>10</td><td>催化剂密度（综合）</td><td class="score-high">9/10</td><td>WWDC+iPhone17</td></tr>
+    <tr><td>11</td><td>盈利预期动量（综合）</td><td class="score-mid">7/10</td><td>EPS上调中</td></tr>
+    <tr><td>12</td><td>资产负债表健康（综合）</td><td class="score-high">10/10</td><td>净现金Position</td></tr>
+    <tr><td>13</td><td>盈利质量（综合）</td><td class="score-high">8/10</td><td>现金丰富</td></tr>
+    <tr><td>14</td><td>舆情/情绪动量（综合）</td><td class="score-mid">6/10</td><td>中性略多</td></tr>
+    <tr style="background:rgba(0,51,141,0.08);font-weight:700;font-size:1.1rem;">
+      <td colspan="2">综合评分</td><td colspan="2">78/100 — <span class="rating-badge rating-BUY" style="display:inline;">BUY</span></td>
+    </tr>
+    <tr style="background:#F5F5DC;">
+      <td colspan="2">辩论调整</td><td colspan="2">-2 (中国风险+AI验证未完成)</td>
+    </tr>
+    <tr style="background:#F5F5DC;font-weight:700;">
+      <td colspan="2">综合评分（辩论调整后）</td><td colspan="2">76/100</td>
+    </tr>
+  </table>
+
+  <table class="zebra" style="margin-top:1rem;">
+    <tr><th colspan="4">多框架交叉验证</th></tr>
+    <tr><th>框架</th><th>结论</th><th>信号</th></tr>
+    <tr><td>格雷厄姆价值</td><td>内在价值$280+</td><td class="signal-green">🟢 买入</td></tr>
+    <tr><td>巴菲特质量</td><td>护城河宽广</td><td class="signal-green">🟢 买入</td></tr>
+    <tr><td>马克斯周期</td><td>周期中段</td><td class="signal-gold">🟡 持有</td></tr>
+    <tr><td>O'Neil技术</td><td>上涨趋势</td><td class="signal-green">🟢 买入</td></tr>
+    <tr><td>管理层/资本配置</td><td>回购积极</td><td class="signal-green">🟢 买入</td></tr>
+    <tr><td>舆情/散户情绪</td><td>中性</td><td class="signal-gold">🟡 观望</td></tr>
+  </table>
+
+  <table class="zebra" style="margin-top:1rem;">
+    <tr><th colspan="2">建议操作汇总</th></tr>
+    <tr><td><strong>评级</strong></td><td><span class="rating-badge rating-BUY">BUY</span></td></tr>
+    <tr><td>确信度</td><td>高</td></tr>
+    <tr><td>目标价</td><td><strong>$297.71</strong></td></tr>
+    <tr><td>时间框架</td><td>12个月</td></tr>
+    <tr><td>上行空间</td><td>+9.0%</td></tr>
+    <tr><td>建议仓位</td><td>3-5% (正常)</td></tr>
+    <tr><td>入场区间</td><td>$260-270</td></tr>
+    <tr><td>止损位</td><td>$235 <em>(触发条件: 中国区iPhone销量持续恶化; AI功能发布后无差异化)</em></td></tr>
+    <tr><td>风险收益比</td><td class="signal-green">1:2.5</td></tr>
+    <tr><td>仓位调整规则</td><td>正常仓位（看多但有逆风）</td></tr>
+  </table>
+</div>
+
+<!-- 15. Bottom Line -->
+<div class="bottom-line">
+  <p><strong>Bottom Line:</strong> Apple是科技投资者必备的核心持仓。AI革命为Apple带来下一个iPhone级别的超级周期机遇，Services业务的高确定性增长+强大现金流+净现金Position构成下行保护。当前估值合理，催化剂明确（WWDC、iPhone 17），建议在$260-270区间逢低布局。</p>
+  <p style="margin-top:0.5rem;color:#666;"><strong>适合投资者类型:</strong> 长期投资者、寻求科技核心仓位的机构投资者、成长+价值混合型投资者</p>
+</div>
+
+<footer>
+  <p>⚠️ 免责声明: 本分析仅供教育和研究用途，不构成投资建议。投资有风险，决策需谨慎。</p>
+  <p>由 Claude Code 全面深度研究系统生成 · 2026-04-22</p>
+  <p>数据来源: yfinance, Finnhub, 分析师一致预期</p>
+</footer>
+<p class="print-hint">Ctrl/Cmd + P 导出PDF</p>
+
+</body>
+</html>

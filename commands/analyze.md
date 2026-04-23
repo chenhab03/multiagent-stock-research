@@ -14,11 +14,95 @@ argument-hint: "[TICKER]"
 ### 输出路径
 本命令所有报告写入 `$RESEARCH_OUTPUT_DIR` 环境变量指定的目录，默认 `~/equity-research/`。后文中所有 `{RESEARCH_OUTPUT_DIR}` 占位符均指向此路径。
 
-### 🌐 语言设定 (v1.0.2)
+### 🌐 语言设定 (v1.0.4)
 
 **默认输出语言：简体中文**（金融术语保留英文缩写如 P/E、EBITDA、DCF、EPS）。
 
-**如果 `$ARGUMENTS` 包含 `--lang en`**：整个报告（所有模块标题、分析内容、表格表头、评分卡、建议操作等）全部用**英文**输出。金融术语保持原样。Module 10 辩论的 Bull/Bear/Judge 产出也用英文。HTML 研报区块文字同步英文化。
+**如果 `$ARGUMENTS` 包含 `--lang en`（强制 ENGLISH_MODE=true）**：**整个报告全部英文**，无任何中文残留。
+
+#### ENGLISH_MODE 下的强制翻译清单（不可漏项）：
+
+**14 维度评分卡 dimension 名称强制英译**：
+| 中文 | English |
+|---|---|
+| 大盘环境 | Macro Environment |
+| 基本面质量 | Fundamentals Quality |
+| 管理层质量 | Management Quality |
+| 盈利预期动量 | Earnings Estimate Momentum |
+| 估值吸引力 | Valuation Attractiveness |
+| 增长前景 | Growth Outlook |
+| 竞争优势 | Competitive Advantage (Moat) |
+| 技术面 | Technicals |
+| 催化剂密度 | Catalyst Density |
+| 机构/期权信号 | Institutional / Options Signal |
+| 周期位置 | Cycle Position |
+| 资产负债表健康度 | Balance Sheet Health |
+| 舆情/情绪动量 | Sentiment Momentum |
+| 风险回报比 | Risk/Reward |
+| 综合评分 | Composite Score |
+| 维度加权平均 | 14-dimension weighted average |
+| 辩论调整 | Debate Adjustment |
+| HOLD_passive 惩罚 | HOLD_passive Penalty |
+| 综合评分（辩论调整后） | Composite Score (Post-Debate) |
+| 评级 | Rating |
+| 确信度 | Confidence |
+| 目标价 | Target Price |
+| 时间框架 | Time Horizon |
+| 上行空间 | Upside |
+| 建议仓位 | Suggested Position Size |
+| 止损位 | Stop-Loss |
+| 风险收益比 | Risk/Reward Ratio |
+| 仓位调整规则 | Position Adjustment Rule |
+
+**模块标题强制英译**：
+| 中文 | English |
+|---|---|
+| 大盘环境评估 | Macro Environment |
+| 执行摘要 | Executive Summary |
+| 基本面分析 | Fundamental Analysis |
+| 管理层质量评估 | Management Quality |
+| 盈利模型与预期追踪 | Earnings Model & Estimate Tracking |
+| 估值分析 | Valuation |
+| 行业与竞争格局 | Industry & Competitive Landscape |
+| 催化剂与投资论题 | Catalysts & Investment Thesis |
+| 技术面与市场信号 | Technicals & Market Signals |
+| 风险管理与仓位建议 | Risk Management & Sizing |
+| 资产负债表深度分析 | Balance Sheet Deep-Dive |
+| 跨资产相关性与因子暴露 | Cross-Asset Correlations & Factor Exposure |
+| 泡沫与极端风险检测 | Bubble & Tail Risk Detection |
+| 舆情与市场情绪动量 | Sentiment & Market Momentum |
+| 多空辩论与终审裁决 | Bull vs Bear Debate & Final Verdict |
+
+**辩论 subagent 派发规则（ENGLISH_MODE）**：
+- 派发 Bull/Bear/Judge subagent 时，**必须在其 prompt 最顶端加入**：
+  > ```
+  > ⚠️ LANGUAGE REQUIREMENT: Respond in English only. All thesis claims, data citations, rebuttals, closing arguments, verdict reasoning, and JSON field values must be in English. Financial term abbreviations (P/E, EBITDA, DCF) stay as-is. Do NOT mix in Chinese text.
+  > ```
+- Bull/Bear/Judge 的 JSON 输出（thesis claim、data、rebuttal text、winner_reasons、unresolved_risks 等所有字符串字段）全部英文。
+- Judge 的 "核心分歧矩阵" bull_view / bear_view / judge_reasoning 全部英文。
+
+**模块十渲染 markdown 的 section 标题强制英译**：
+| 中文 | English |
+|---|---|
+| 历史判断对账表 | Prior Call Review |
+| 关键反思 | Key Reflections |
+| 🥊 辩论 Transcript 精华 | 🥊 Debate Transcript Summary |
+| 🐂 多头 Top 3 | 🐂 Bull Top 3 |
+| 🐻 空头 Top 3 | 🐻 Bear Top 3 |
+| 反驳结果 | Rebuttal Outcomes |
+| 终陈 | Closing Statements |
+| 🏆 Judge 终审 | 🏆 Judge Verdict |
+| 核心分歧表 | Key Disagreements |
+| ⚠️ 未被反驳的风险 | ⚠️ Unresolved Risks |
+| 对评分卡的影响 | Scorecard Adjustments |
+
+**Investment Thesis / Bottom Line / 建议操作 table rows 全部英文**。
+
+**Disclaimer 英文**：
+> "For research and educational use only. Not investment advice. Past performance does not guarantee future results. Consult a licensed professional before making any investment decisions."
+
+金融术语保留原样：P/E, EBITDA, DCF, EPS, FCF, ROE, ROIC, WACC, CAGR, YoY, QoQ, LTM, Beat/Miss, BUY/SELL/HOLD_active/HOLD_passive, bull/bear thesis 等。
+公司名称、ticker 保留大写原样。
 
 ### 输入解析
 - 从 `$ARGUMENTS` 提取股票代码（如 AAPL、NVDA、DUOL）
@@ -86,83 +170,10 @@ if not FINNHUB_TOKEN:
 
 ---
 
-#### A股 → akshare（完整基本面）
 
-```python
-import akshare as ak
-from datetime import datetime, timedelta
-import json
+> ⚠️ **A 股主数据源**：先跑 **TuShare** 拉全 PE_TTM/PB/PS_TTM、分析师一致预期、券商评级、主力资金流、机构持仓。TuShare 失败或缺字段时再用 akshare 补。**不要反过来。**
 
-ticker = "TICKER_HERE"  # 6位纯数字，如 600519
-
-# ── 1. 实时行情（含 PE、PB、市值、换手率）──
-spot = ak.stock_zh_a_spot_em()
-row = spot[spot['代码'] == ticker].iloc[0]
-price        = row['最新价']
-pe_dynamic   = row['市盈率-动态']
-pb           = row['市净率']
-market_cap   = row['总市值'] / 1e8        # 亿元
-float_cap    = row['流通市值'] / 1e8
-turnover_rate = row['换手率']             # %
-change_pct   = row['涨跌幅']             # %
-chg_60d      = row['60日涨跌幅']
-chg_ytd      = row['年初至今涨跌幅']
-
-# ── 2. 52周价格区间 + 均线 ──
-end_d   = datetime.today().strftime('%Y%m%d')
-start_d = (datetime.today() - timedelta(days=365)).strftime('%Y%m%d')
-hist = ak.stock_zh_a_hist(symbol=ticker, period="daily",
-                           start_date=start_d, end_date=end_d, adjust="qfq")
-high_52w     = hist['最高'].max()
-low_52w      = hist['最低'].min()
-latest_close = hist['收盘'].iloc[-1]
-latest_date  = str(hist['日期'].iloc[-1])
-ma50         = hist['收盘'].tail(50).mean()
-ma200        = hist['收盘'].tail(200).mean() if len(hist) >= 200 else None
-pct_from_high = (latest_close - high_52w) / high_52w * 100  # 距高点跌幅
-
-# ── 3. 年度财务摘要（近5年）──
-# 含：净利润/营收/EPS/ROE/销售毛利率/资产负债率/每股经营现金流
-fin = ak.stock_financial_abstract_ths(symbol=ticker, indicator='按年度')
-fin_recent = fin.tail(5)  # 最近5年
-
-# ── 4. 详细利润表（最新年/季报）──
-try:
-    prefix = 'sh' if ticker.startswith('6') else 'sz'
-    profit_df = ak.stock_financial_report_sina(stock=f'{prefix}{ticker}', symbol='利润表')
-    latest_profit = profit_df.iloc[0]   # 最新期
-    revenue      = latest_profit.get('营业总收入')
-    net_profit   = latest_profit.get('净利润')
-    gross_margin_val = latest_profit.get('营业总收入', 0) - latest_profit.get('营业成本', 0)
-    eps_basic    = latest_profit.get('基本每股收益')
-except Exception as e:
-    print(f"利润表获取失败: {e}")
-
-# ── 5. 个股基本信息（行业、总股本）──
-basic = ak.stock_individual_info_em(symbol=ticker)
-info_dict = dict(zip(basic['item'], basic['value']))
-industry   = info_dict.get('行业', '')
-total_shares = info_dict.get('总股本', '')
-company_name = info_dict.get('股票简称', ticker)
-
-# ── 输出摘要 ──
-print(json.dumps({
-    "ticker": ticker, "name": company_name, "market": "CN",
-    "price": price, "date": latest_date,
-    "change_pct": change_pct, "chg_60d": chg_60d, "chg_ytd": chg_ytd,
-    "high_52w": high_52w, "low_52w": low_52w, "pct_from_high": round(pct_from_high, 1),
-    "ma50": round(ma50, 2), "ma200": round(ma200, 2) if ma200 else None,
-    "pe_dynamic": pe_dynamic, "pb": pb,
-    "market_cap_bn_cny": round(market_cap, 1),
-    "float_cap_bn_cny": round(float_cap, 1),
-    "turnover_rate": turnover_rate,
-    "industry": industry, "total_shares": total_shares,
-}, ensure_ascii=False, indent=2))
-print("\n=== 近5年财务摘要 ===")
-print(fin_recent[['报告期','营业总收入','净利润','基本每股收益','销售毛利率','净资产收益率','资产负债率']].to_string())
-```
-
-#### A股 → TuShare（分析师数据 + 资金流 + 机构持仓）
+#### A股 → TuShare（**主数据源**：实时行情 + 分析师预测 + 券商评级 + 资金流 + 机构持仓）
 
 ```python
 import os
@@ -257,6 +268,82 @@ except Exception as e:
 **注意：FSP Skills 不支持 A 股，第一步直接跳过，所有基本面数据来自上方 akshare + TuShare 脚本。**
 
 ---
+
+#### A股 → akshare（补充数据：基本面详表 / 年度财务摘要 / 个股信息）
+
+```python
+import akshare as ak
+from datetime import datetime, timedelta
+import json
+
+ticker = "TICKER_HERE"  # 6位纯数字，如 600519
+
+# ── 1. 实时行情（含 PE、PB、市值、换手率）──
+spot = ak.stock_zh_a_spot_em()
+row = spot[spot['代码'] == ticker].iloc[0]
+price        = row['最新价']
+pe_dynamic   = row['市盈率-动态']
+pb           = row['市净率']
+market_cap   = row['总市值'] / 1e8        # 亿元
+float_cap    = row['流通市值'] / 1e8
+turnover_rate = row['换手率']             # %
+change_pct   = row['涨跌幅']             # %
+chg_60d      = row['60日涨跌幅']
+chg_ytd      = row['年初至今涨跌幅']
+
+# ── 2. 52周价格区间 + 均线 ──
+end_d   = datetime.today().strftime('%Y%m%d')
+start_d = (datetime.today() - timedelta(days=365)).strftime('%Y%m%d')
+hist = ak.stock_zh_a_hist(symbol=ticker, period="daily",
+                           start_date=start_d, end_date=end_d, adjust="qfq")
+high_52w     = hist['最高'].max()
+low_52w      = hist['最低'].min()
+latest_close = hist['收盘'].iloc[-1]
+latest_date  = str(hist['日期'].iloc[-1])
+ma50         = hist['收盘'].tail(50).mean()
+ma200        = hist['收盘'].tail(200).mean() if len(hist) >= 200 else None
+pct_from_high = (latest_close - high_52w) / high_52w * 100  # 距高点跌幅
+
+# ── 3. 年度财务摘要（近5年）──
+# 含：净利润/营收/EPS/ROE/销售毛利率/资产负债率/每股经营现金流
+fin = ak.stock_financial_abstract_ths(symbol=ticker, indicator='按年度')
+fin_recent = fin.tail(5)  # 最近5年
+
+# ── 4. 详细利润表（最新年/季报）──
+try:
+    prefix = 'sh' if ticker.startswith('6') else 'sz'
+    profit_df = ak.stock_financial_report_sina(stock=f'{prefix}{ticker}', symbol='利润表')
+    latest_profit = profit_df.iloc[0]   # 最新期
+    revenue      = latest_profit.get('营业总收入')
+    net_profit   = latest_profit.get('净利润')
+    gross_margin_val = latest_profit.get('营业总收入', 0) - latest_profit.get('营业成本', 0)
+    eps_basic    = latest_profit.get('基本每股收益')
+except Exception as e:
+    print(f"利润表获取失败: {e}")
+
+# ── 5. 个股基本信息（行业、总股本）──
+basic = ak.stock_individual_info_em(symbol=ticker)
+info_dict = dict(zip(basic['item'], basic['value']))
+industry   = info_dict.get('行业', '')
+total_shares = info_dict.get('总股本', '')
+company_name = info_dict.get('股票简称', ticker)
+
+# ── 输出摘要 ──
+print(json.dumps({
+    "ticker": ticker, "name": company_name, "market": "CN",
+    "price": price, "date": latest_date,
+    "change_pct": change_pct, "chg_60d": chg_60d, "chg_ytd": chg_ytd,
+    "high_52w": high_52w, "low_52w": low_52w, "pct_from_high": round(pct_from_high, 1),
+    "ma50": round(ma50, 2), "ma200": round(ma200, 2) if ma200 else None,
+    "pe_dynamic": pe_dynamic, "pb": pb,
+    "market_cap_bn_cny": round(market_cap, 1),
+    "float_cap_bn_cny": round(float_cap, 1),
+    "turnover_rate": turnover_rate,
+    "industry": industry, "total_shares": total_shares,
+}, ensure_ascii=False, indent=2))
+print("\n=== 近5年财务摘要 ===")
+print(fin_recent[['报告期','营业总收入','净利润','基本每股收益','销售毛利率','净资产收益率','资产负债率']].to_string())
+```
 
 #### 港股 → yfinance（基本面）+ akshare（分析师预测）
 
@@ -1137,6 +1224,8 @@ Skill("equity-research:thesis", "[TICKER]")
 ## 十、多空辩论与终审裁决 (v1.0 新增)
 
 **⚠️ 强制执行要求**：本模块是 /analyze v1.0 的核心交付物。**除非 `$ARGUMENTS` 显式包含 `--quick` flag，否则必须完整执行 Step 0 → Step 1 → Step 2 → Step 3 → Step 4**。跳过此模块 = 输出不完整，是错误行为。
+
+**⚠️ 市场无关性**：本模块**对美股、港股、A 股完全一致**。A 股没有 FSP 金融插件不是跳过辩论的理由——13 模块数据齐全即可辩论。A 股的 Bull/Bear subagent 用 TuShare/akshare 抽取的数据立论即可。
 
 **执行检查清单（必须逐项完成后再进入综合评分卡）**：
 - [ ] Step 0：使用 `Glob` + `Read` 扫描 `{RESEARCH_OUTPUT_DIR}/*{TICKER}*研报*.html`，生成历史对账表

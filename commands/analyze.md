@@ -11,8 +11,39 @@ argument-hint: "[TICKER]"
 
 ## 执行流程
 
-### 输出路径
-本命令所有报告写入 `$RESEARCH_OUTPUT_DIR` 环境变量指定的目录，默认 `~/equity-research/`。后文中所有 `{RESEARCH_OUTPUT_DIR}` 占位符均指向此路径。
+### 输出路径（智能 fallback，v1.1.1）
+
+本命令写报告时，`{RESEARCH_OUTPUT_DIR}` 占位符按以下优先级解析（找到第一个存在的目录就用）：
+
+1. `$RESEARCH_OUTPUT_DIR` 环境变量（若已设置且非空）
+2. `~/Dropbox/project/Documents/投研报告/`（中文 Dropbox 约定）
+3. `~/Dropbox/project/投研报告/`
+4. `~/Dropbox/equity-research/`（英文 Dropbox 约定）
+5. 最终 fallback: `~/equity-research/`（不存在则自动创建）
+
+**Python 代码块里先用这个 helper 解析**（任何写文件或调用 Glob 前执行一次）：
+```python
+import os
+def resolve_output_dir():
+    env = os.environ.get("RESEARCH_OUTPUT_DIR", "").strip()
+    if env: return os.path.expanduser(env)
+    home = os.path.expanduser("~")
+    for p in [f"{home}/Dropbox/project/Documents/投研报告/",
+              f"{home}/Dropbox/project/投研报告/",
+              f"{home}/Dropbox/equity-research/"]:
+        if os.path.isdir(p): return p
+    default = f"{home}/equity-research/"
+    os.makedirs(default, exist_ok=True)
+    return default
+
+OUTPUT_DIR = resolve_output_dir()   # 之后所有 {RESEARCH_OUTPUT_DIR} 等价于 OUTPUT_DIR
+```
+
+**使用 Glob 工具时**（如 Module 10 Step 0），按顺序尝试上面 5 个路径，找到有历史报告的第一个就用：
+```
+Glob({RESEARCH_OUTPUT_DIR}/*{TICKER}*研报*.html)
+→ 实际相当于对 resolve_output_dir() 返回的路径跑 glob
+```
 
 ### 🌐 语言设定 (v1.0.4)
 

@@ -68,6 +68,8 @@ A real rendered report is at [`samples/AAPL-sample-report.html`](samples/AAPL-sa
 
 > Quick preview without cloning: https://raw.githack.com/chenhab03/multiagent-stock-research/main/samples/AAPL-sample-report.html
 
+**English sample report** (generated with \`--lang en\`): [`samples/AAPL-sample-english.html`](samples/AAPL-sample-english.html) — preview: https://raw.githack.com/chenhab03/multiagent-stock-research/main/samples/AAPL-sample-english.html
+
 ### Architecture
 
 See [docs/debate-mechanism.md](docs/debate-mechanism.md) for the debate flow and [docs/methodology.md](docs/methodology.md) for the 13-module framework.
@@ -153,6 +155,8 @@ export RESEARCH_OUTPUT_DIR="$HOME/equity-research"   # 可选，默认 ~/equity-
 真实研报样本：[`samples/AAPL-sample-report.html`](samples/AAPL-sample-report.html)，浏览器打开可看完整高盛风格布局，含 Module 10 辩论区（多空 Top 3、核心分歧矩阵、未解风险、含辩论调整的评分卡）。
 
 > 不克隆也能预览：https://raw.githack.com/chenhab03/multiagent-stock-research/main/samples/AAPL-sample-report.html
+
+**英文版 sample**（\`--lang en\` 生成）：[`samples/AAPL-sample-english.html`](samples/AAPL-sample-english.html) — 预览: https://raw.githack.com/chenhab03/multiagent-stock-research/main/samples/AAPL-sample-english.html
 
 ### 方法论
 

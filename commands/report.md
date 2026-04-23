@@ -565,6 +565,13 @@ ECharts 色板（GS 风格）：
 ## 文件输出
 
 - 保存路径：`{RESEARCH_OUTPUT_DIR}/[TICKER]-研报-YYYYMMDD.html`
+  `{RESEARCH_OUTPUT_DIR}` 按以下优先级解析（v1.1.1 智能 fallback）：
+  1. `$RESEARCH_OUTPUT_DIR` env var
+  2. `~/Dropbox/project/Documents/投研报告/`（中文 Dropbox）
+  3. `~/Dropbox/project/投研报告/`
+  4. `~/Dropbox/equity-research/`（英文 Dropbox）
+  5. `~/equity-research/`（兜底，自动创建）
+  Python: `os.environ.get("RESEARCH_OUTPUT_DIR") or next((p for p in [os.path.expanduser(x) for x in ["~/Dropbox/project/Documents/投研报告/", "~/Dropbox/project/投研报告/", "~/Dropbox/equity-research/"]] if os.path.isdir(p)), os.path.expanduser("~/equity-research/"))`
 - **`--silent` 模式**（由 `/analyze --silent` 传入）：
   - **不执行** `open` 命令，不自动打开浏览器
   - 仅输出一行进度：`✅ TICKER 研报已生成 → [完整路径]`

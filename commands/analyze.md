@@ -1059,6 +1059,53 @@ Skill("equity-research:thesis", "[TICKER]")
 
 ---
 
+## 六C、衍生品与流向情报 (v1.1 新增)
+
+**市场分支执行**：
+
+### 美股 / 港股大型 ticker
+调用 options-strategy-advisor skill 的 flow_analyzer 脚本：
+```bash
+python3 ~/.claude/skills/options-strategy-advisor/scripts/flow_analyzer.py {TICKER} --expiries 3
+```
+数据源: CBOE delayed quotes (免费，无 token)，返回真实 OI / volume / IV / Greeks。
+
+提取并报告：
+- **Put/Call ratio** (OI 和 volume 两口径)
+- **Max Pain** 点位 + 距离现价百分比
+- **IV 期限结构** (近 3 个到期日的 ATM IV)
+- **IV Skew** (OTM put IV vs OTM call IV)
+- **Top OI strikes** (call/put 各前 3 — 支撑/阻力代理)
+- **GEX 估算** (; 正=dealer 压制波动, 负=dealer 放大波动)
+- **定性解读**（来自 flow_analyzer 的 interpretation 字段）
+
+对辩论的用途: Bull 可引用 "P/C 0.65 看多定位"；Bear 可引用 "GEX -bn 负 gamma 放大下跌"。
+
+### A 股 (6 位数字 ticker)
+调用 a-share-flow-analyzer skill：
+```bash
+python3 ~/.claude/skills/a-share-flow-analyzer/scripts/flow_analyzer.py {TICKER} --lookback 60
+```
+数据源: TuShare Pro (需 TUSHARE_TOKEN env var)。
+
+提取并报告：
+- **融资余额** + 60 日变化% + 52 周分位
+- **融资净买入 5/20 日** (亿元)
+- **融券余额** (通常很小，突增时警惕)
+- **龙虎榜近 30 日上榜次数** + 机构/游资净买入对比
+- **主力资金 5/20 日净流入** (亿元)
+- **大单占比** (>0.3 为显著机构参与)
+
+对辩论的用途: Bull 可引用 "20日融资净买入+73亿，机构持续加仓"；Bear 可引用 "融资余额52周80%分位过热"。
+
+### 港股小票 / 无期权覆盖 ticker
+报告："该股票无期权数据且非 A 股标的，流向情报不可用。可用模块九(舆情)和模块六(技术面)作为替代。"
+
+### 整体衍生品/流向评分
+基于上述信号给出 1-10 打分，纳入综合评分卡新增的 "衍生品/流向" 维度（如果存在）。
+
+---
+
 ## 七、风险管理与仓位建议
 > 来源: `position-sizer` + `/trading-ideas` 风控部分
 
